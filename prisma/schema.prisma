@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// schemas
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  clerkId  String @unique
+  password String
+  // Add other user-related fields (e.g., name, profile picture, etc.)
+  // ...
+
+  // Define a one-to-many relationship between User and Post
+  posts Post[]
+}
+
+model Post {
+  id          Int            @id @default(autoincrement())
+  title       String
+  description String
+  category    Category       @relation(fields: [categoryId], references: [id])
+  userId      Int
+  user        User           @relation(fields: [userId], references: [id])
+  price       Float?
+  promotion   PromotionType? // Can be null for unpaid posts
+  // Add other post-related fields
+  // ...
+
+  // Define a one-to-many relationship between Post and Payment (for promoted posts)
+  payments   Payment[]
+  categoryId Int
+
+  @@index([userId])
+  @@index([categoryId])
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  posts Post[]
+}
+
+model Payment {
+  id            Int           @id @default(autoincrement())
+  postId        Int
+  post          Post          @relation(fields: [postId], references: [id])
+  amount        Float
+  paymentMethod PaymentMethod
+
+  // Add other payment-related fields
+  // ...
+  @@index([postId])
+}
+
+enum PromotionType {
+  SILVER
+  GOLD
+}
+
+enum PaymentMethod {
+  STRIPE
+  PAYPAL
+}
