@@ -14,10 +14,10 @@ generator client {
 // schemas
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  clerkId  String @unique
-  password String
+  id      String @id @default(uuid())
+  email   String @unique
+  clerkId String @unique
+  // password String
   // Add other user-related fields (e.g., name, profile picture, etc.)
   // ...
 
@@ -26,34 +26,46 @@ model User {
 }
 
 model Post {
-  id          Int            @id @default(autoincrement())
+  id          String         @id @default(uuid())
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
   title       String
-  description String
+  description String         @db.Text
   category    Category       @relation(fields: [categoryId], references: [id])
-  userId      Int
+  userId      String
   user        User           @relation(fields: [userId], references: [id])
   price       Float?
   promotion   PromotionType? // Can be null for unpaid posts
   // Add other post-related fields
-  // ...
+  imageUrl    Image[]
 
   // Define a one-to-many relationship between Post and Payment (for promoted posts)
   payments   Payment[]
   categoryId Int
 
-  @@index([userId])
+  @@index([userId, id])
   @@index([categoryId])
 }
 
+model Image {
+  id     String  @id @default(cuid())
+  url    String
+  Post   Post?   @relation(fields: [postId], references: [id])
+  postId String?
+
+  @@index([postId])
+}
+
 model Category {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  posts Post[]
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  // posts Post[]
+  Post Post[]
 }
 
 model Payment {
   id            Int           @id @default(autoincrement())
-  postId        Int
+  postId        String
   post          Post          @relation(fields: [postId], references: [id])
   amount        Float
   paymentMethod PaymentMethod

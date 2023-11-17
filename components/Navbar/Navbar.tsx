@@ -1,3 +1,5 @@
+'use client';
+import { useState } from 'react';
 import logo from '../../public/noback.svg';
 import Image from 'next/image';
 import './Navbar.css';
@@ -8,12 +10,15 @@ import {
   UserButton,
   SignUpButton,
 } from '@clerk/nextjs';
+import PostForm from '../postForm/PostForm';
 
 const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <nav>
       <div className="logo-cont">
-        <Image src={logo} alt="website logo" className="img" />
+        <Image src={logo} alt="website logo" className="img" priority />
         <span>Pet Services</span>
       </div>
       <ul>
@@ -22,6 +27,7 @@ const Navbar = () => {
       <div className="user-cont">
         <SignedIn>
           {/* Mount the UserButton component */}
+          <button onClick={() => setIsOpen(true)}>Publica tu anuncio</button>
           <UserButton afterSignOutUrl="/" />
         </SignedIn>
         <SignedOut>
@@ -29,15 +35,16 @@ const Navbar = () => {
           <SignUpButton
             mode="modal"
             afterSignUpUrl="/new-user"
-            redirectUrl="/new-user"
+            // redirectUrl="/new-user"
           >
             <button>Registrate</button>
           </SignUpButton>
-          <SignInButton mode="modal">
+          <SignInButton mode="modal" redirectUrl="/" afterSignInUrl="/">
             <button>Inicia sesion</button>
           </SignInButton>
         </SignedOut>
       </div>
+      {isOpen && <PostForm setIsOpen={setIsOpen} />}
     </nav>
   );
 };

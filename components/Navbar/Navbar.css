@@ -1,5 +1,4 @@
 nav {
-  border: 1px solid red;
   height: 10vh;
   display: flex;
   justify-content: space-between;
@@ -11,24 +10,20 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid red;
 }
 
 .img {
   height: 100%;
-  border: 1px solid red;
   width: auto;
 }
 
 nav span {
   width: auto;
-  border: 1px solid red;
   font-family: 'Roboto', sans-serif;
 }
 
 .user-cont {
   width: 25%;
-  border: 1px solid red;
   display: flex;
   align-items: center;
   justify-content: space-evenly;

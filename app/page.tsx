@@ -1,17 +1,13 @@
 import { prisma } from '../utils/db';
 import Navbar from '@/components/Navbar/Navbar';
+import Gallery from '@/components/Gallery/Gallery';
 
-export default function Home() {
-  // const getUsers = async () => {
-  //   const users = await prisma.user.findMany({});
-  //   return users;
-  // };
-  // const users = getUsers();
-  // console.log(users);
-
+// @ts-ignore
+export default function Home(props) {
   return (
     <body>
       <Navbar />
+      {/* <Gallery props={props} /> */}
     </body>
   );
 }
