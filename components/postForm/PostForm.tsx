@@ -7,25 +7,37 @@ import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid';
 // @ts-ignore
 export default function postForm({ setIsOpen }) {
   const [imageUploaded, setImageUploaded] = useState();
+  const [imageName, setImageName] = useState('');
+  const [imagePreview, setImagePreview] = useState('');
   const form = useRef(null);
 
   // @ts-ignore
   const handleChange = (event) => {
     setImageUploaded(event.target.files[0]);
+    // let names = event.target.files;
+    // let imageNameCont = [];
+    // for (let name of names) {
+    //   imageNameCont.push(name.name);
+    // }
+    // @ts-ignore
+    setImageName(event.target.files[0].name);
+    setImagePreview(URL.createObjectURL(event.target.files[0]));
   };
 
   async function submitData(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (!imageUploaded) {
+      console.log('no image uploaded FORM');
       return;
     }
 
     try {
       // @ts-ignore
       const formData = new FormData(form.current);
+      console.log(form.current);
 
-      console.log(formData);
+      console.log('FORM DATA', formData);
 
       const response = await fetch('/api/upload', {
         method: 'POST',
@@ -33,10 +45,11 @@ export default function postForm({ setIsOpen }) {
         // headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      const data = await response.json();
-      console.log(data);
+      // const data = await response.json();
+      // console.log(data);
 
       // Router.push('/');
+      setIsOpen(false);
     } catch (error) {
       console.error(error);
     }
@@ -47,72 +60,11 @@ export default function postForm({ setIsOpen }) {
     <>
       <div className="darkBG">
         <div className="form-cont">
-          {/* <button className="closeBtn" onClick={() => setIsOpen(false)}>
-            <RiCloseLine style={{ marginBottom: '-3px' }} />
-          </button> */}
-          {/* <form ref={form} onSubmit={submitData}>
-            <h1>Publica un nuevo anuncio</h1>
-            <label htmlFor="title">Titulo para tu anuncio</label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              placeholder="Titulo de tu publicacion"
-            />
-            <label htmlFor="description">Descripcion</label>
-            <textarea
-              name="description"
-              id="description"
-              placeholder="describe tu producto"
-            />
-            <fieldset>
-              <legend>Escogera la categoria de tu anuncio:</legend>
-              <div>
-                <input
-                  // @ts-ignore
-                  type="radio"
-                  id="Peluqueria"
-                  name="category"
-                  value="Peluqueria"
-                />
-                <label htmlFor="Peluqueria">Peluqueria</label>
-                <input
-                  type="radio"
-                  id="Paseadores"
-                  name="category"
-                  value="Paaseadores"
-                />
-                <label htmlFor="Paseadores">Paseadores</label>
-                <input
-                  type="radio"
-                  id="Veterinarios"
-                  name="category"
-                  value="Veterinarios"
-                />
-                <label htmlFor="Veterinarios">Veterinarios</label>
-                <input
-                  type="radio"
-                  id="Productos"
-                  name="category"
-                  value="Productos"
-                />
-                <label htmlFor="Productos">Productos</label>
-              </div>
-            </fieldset>
-            <input
-              onChange={handleChange}
-              name="image"
-              accept=".jpg, .png, .gif, .jpeg"
-              type="file"
-            ></input>
-            <label htmlFor="image">carga tus imagenes</label>
-            <input type="submit" value="Upload" />
-          </form> */}
           <form ref={form} onSubmit={submitData}>
             <div className="space-y-8">
               <div className="border-b border-gray-900/10 pb-8">
                 <h2 className="text-base font-semibold leading-7 text-gray-900">
-                  Profile
+                  Nueva Publicacion
                 </h2>
                 {/* <p className="mt-1 text-sm leading-6 text-gray-600">
                   This information will be displayed publicly so be careful what
@@ -167,36 +119,63 @@ export default function postForm({ setIsOpen }) {
                       htmlFor="cover-photo"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     >
-                      Imagenes
+                      Imagen para tu publicacion
                     </label>
                     <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-6">
                       <div className="text-center">
-                        <PhotoIcon
-                          className="mx-auto h-12 w-12 text-gray-300"
-                          aria-hidden="true"
-                        />
-                        <div className="mt-2 flex text-sm leading-6 text-gray-600">
+                        {!imageUploaded ? (
+                          <PhotoIcon
+                            className="mx-auto h-12 w-12 text-gray-300"
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <>
+                            <img
+                              className="img-preview mx-auto"
+                              src={imagePreview}
+                            ></img>
+                          </>
+                        )}
+
+                        <p className="text-xs leading-5 text-gray-600">
+                          {imageUploaded
+                            ? imageName
+                            : 'PNG, JPG, JPEG hasta 10MB'}
+                        </p>
+                        <div className="mt-2 flex text-sm leading-6 text-gray-600 ml-2">
                           <label
                             htmlFor="file-upload"
-                            className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                            className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 border border-indigo-600 p-2 mb-1 ml-2"
                           >
-                            <span>Sube tus imagenes</span>
+                            <p>
+                              {!imageUploaded
+                                ? 'Sube tu imagen'
+                                : 'Cambia tu Imagen'}
+                            </p>
+
                             <input
                               id="file-upload"
                               type="file"
                               onChange={handleChange}
                               name="image"
                               // accept=".jpg, .png, .gif, .jpeg"
-                              // // @ts-ignore
+                              // @ts-ignore
                               // multiple="multiple"
                               className="sr-only"
                             />
                           </label>
-                          <p className="pl-1">o arrastralas aqui</p>
+                          {imageUploaded && (
+                            <button
+                              // @ts-ignore
+                              onClick={() => setImageUploaded(null)}
+                              className="relative cursor-pointer rounded-md bg-white font-semibold text-red-600 border border-red-600 p-2 mb-1 ml-2"
+                            >
+                              Borrar Imagen
+                            </button>
+                          )}
+
+                          {/* <p className="pl-1">o arrastralas aqui</p> */}
                         </div>
-                        <p className="text-xs leading-5 text-gray-600">
-                          PNG, JPG, GIF hasta 10MB
-                        </p>
                       </div>
                     </div>
                   </div>
@@ -207,71 +186,75 @@ export default function postForm({ setIsOpen }) {
                 <div className="mt-4 space-y-10">
                   <fieldset>
                     <legend className="text-sm font-semibold leading-6 text-gray-900">
-                      Categoria de tu publicacion
+                      Categoria para tu publicacion
                     </legend>
                     {/* <p className="mt-1 text-sm leading-6 text-gray-600">
                       These are delivered via SMS to your mobile phone.
                     </p> */}
-                    <div className="mt-2 space-y-2">
-                      <div className="flex items-center gap-x-3">
-                        <input
-                          type="radio"
-                          id="Peluqueria"
-                          name="category"
-                          value="Peluqueria"
-                          className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                        />
-                        <label
-                          htmlFor="push-everything"
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Peluqueria
-                        </label>
+                    <div className="mt-2 radio-cont">
+                      <div className="radioleft">
+                        <div className="flex items-center gap-x-3">
+                          <input
+                            type="radio"
+                            id="Peluqueria"
+                            name="category"
+                            value="Peluqueria"
+                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                          />
+                          <label
+                            htmlFor="push-everything"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Peluqueria
+                          </label>
+                        </div>
+                        <div className="flex items-center gap-x-3">
+                          <input
+                            type="radio"
+                            id="Paseadores"
+                            name="category"
+                            value="Paseadores"
+                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                          />
+                          <label
+                            htmlFor="push-email"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Paseadores
+                          </label>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-x-3">
-                        <input
-                          type="radio"
-                          id="Paseadores"
-                          name="category"
-                          value="Paseadores"
-                          className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                        />
-                        <label
-                          htmlFor="push-email"
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Paseadores
-                        </label>
-                      </div>
-                      <div className="flex items-center gap-x-3">
-                        <input
-                          type="radio"
-                          id="Veterinarios"
-                          name="category"
-                          value="Veterinarios"
-                          className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                        />
-                        <label
-                          htmlFor="push-nothing"
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Veterinarios
-                        </label>
-                      </div>
-                      <div className="flex items-center gap-x-3">
-                        <input
-                          type="radio"
-                          id="Productos"
-                          name="category"
-                          value="Productos"
-                          className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                        />
-                        <label
-                          htmlFor="push-nothing"
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Productos
-                        </label>
+                      <div className="radioright">
+                        <div className="flex items-center gap-x-3">
+                          <input
+                            type="radio"
+                            id="Veterinarios"
+                            name="category"
+                            value="Veterinarios"
+                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                          />
+                          <label
+                            htmlFor="push-nothing"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Veterinarios
+                          </label>
+                        </div>
+                        <div className="flex items-center gap-x-3">
+                          <input
+                            type="radio"
+                            id="Productos"
+                            name="category"
+                            value="Productos"
+                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                          />
+                          <label
+                            htmlFor="push-nothing"
+                            className="block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Productos
+                          </label>
+                        </div>
                       </div>
                     </div>
                   </fieldset>

@@ -19,13 +19,14 @@ export async function POST(request) {
   const user = await currentUser();
 
   const data = await request.formData();
-  const title = await data.get('title');
-  const description = await data.get('description');
-  const category = await data.get('category');
-
+  console.log('DATA API', data);
+  const title = data.get('title');
+  const description = data.get('description');
+  const category = data.get('category');
   const image = data.get('image');
+
   if (!image) {
-    return NextResponse.json('no image uploaded');
+    return NextResponse.json('no image uploaded API');
   }
 
   const bytes = await image.arrayBuffer();

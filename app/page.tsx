@@ -1,13 +1,12 @@
-import { prisma } from '../utils/db';
 import Navbar from '@/components/Navbar/Navbar';
-import Gallery from '@/components/Gallery/Gallery';
+import PostList from '@/components/PostList/PostList';
 
 // @ts-ignore
-export default function Home(props) {
+export default function Home() {
   return (
     <body>
       <Navbar />
-      {/* <Gallery props={props} /> */}
+      <PostList />
     </body>
   );
 }
