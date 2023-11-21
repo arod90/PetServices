@@ -4,11 +4,5 @@ import PostList from '@/components/PostList/PostList';
 
 // @ts-ignore
 export default function Home() {
-  return (
-    <body>
-      {/* <Navbar /> */}
-      {/* <PostList /> */}
-      {/* <CategoryBar /> */}
-    </body>
-  );
+  return <body></body>;
 }

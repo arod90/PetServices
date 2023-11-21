@@ -1,6 +1,4 @@
 import './CategoryBar.css';
-import PostList from '@/components/PostList/PostList';
-import { getPostsByCategory } from '@/utils/api';
 
 const navigation = [
   { name: 'Peluqueria', href: 'peluqueria' },

@@ -1,6 +1,5 @@
 import React from 'react';
 import './PostList.css';
-// import CategoryBar from '../CategoryBar/CategoryBar';
 import PostCard from '../PostCard/PostCard';
 
 const PostList = async ({ posts }: any) => {

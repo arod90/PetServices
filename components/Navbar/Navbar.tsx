@@ -22,13 +22,15 @@ export default function Example() {
         className="mx-auto flex max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8"
         aria-label="Global"
       >
-        <div className="logo-cont">
-          <img
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt=""
-          />
-          <span>Pet Market</span>
-        </div>
+        <a href="/">
+          <div className="logo-cont">
+            <img
+              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+              alt=""
+            />
+            <span>Pet Market</span>
+          </div>
+        </a>
         <div className="flex flex-1 items-center justify-end gap-x-6">
           <SignedIn>
             {/* Mount the UserButton component */}
