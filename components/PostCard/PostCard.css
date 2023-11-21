@@ -1,0 +1,19 @@
+.card {
+  border-radius: 10px;
+  box-shadow: 10px 10px 9px -7px rgba(0, 0, 0, 0.67);
+  -webkit-box-shadow: 10px 10px 9px -7px rgba(0, 0, 0, 0.67);
+  -moz-box-shadow: 10px 10px 9px -7px rgba(0, 0, 0, 0.67);
+  margin-bottom: 50px;
+  max-width: 100%;
+  max-height: 100vh;
+}
+
+.divide {
+  border-bottom: 1px solid rgba(149, 149, 149, 0.76);
+}
+
+.image-cont {
+  border: 1px solid rgba(182, 182, 182, 0.731);
+  border-radius: 10px;
+  padding: 5px;
+}

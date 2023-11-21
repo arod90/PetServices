@@ -31,30 +31,30 @@ model Post {
   updatedAt   DateTime       @updatedAt
   title       String
   description String         @db.Text
-  category    Category       @relation(fields: [categoryId], references: [id])
+  category    Category       @relation(fields: [categoryName], references: [name])
   userId      String
   user        User           @relation(fields: [userId], references: [id])
   price       Float?
   promotion   PromotionType? // Can be null for unpaid posts
   // Add other post-related fields
-  imageUrl    Image[]
+  imageUrl    String
 
   // Define a one-to-many relationship between Post and Payment (for promoted posts)
   payments   Payment[]
-  categoryId Int
+  categoryName String
 
   @@index([userId, id])
-  @@index([categoryId])
+  @@index([categoryName])
 }
 
-model Image {
-  id     String  @id @default(cuid())
-  url    String
-  Post   Post?   @relation(fields: [postId], references: [id])
-  postId String?
+// model Image {
+//   id     String  @id @default(cuid())
+//   url    String
+//   Post   Post?   @relation(fields: [postId], references: [id])
+//   postId String?
 
-  @@index([postId])
-}
+//   @@index([postId])
+// }
 
 model Category {
   id   Int    @id @default(autoincrement())

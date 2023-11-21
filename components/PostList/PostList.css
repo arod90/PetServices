@@ -1,0 +1,10 @@
+main {
+  padding: 20px;
+}
+
+.subnav {
+  height: 6vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}

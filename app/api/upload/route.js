@@ -60,12 +60,14 @@ export async function POST(request) {
           create: { name: category },
         },
       },
-      // imageUrl: response.secure_url,
-      imageUrl: {
-        create: {
-          url: response.secure_url,
-        },
-      },
+      imageUrl: response.secure_url,
+
+      // for image array!
+      // imageUrl: {
+      //   create: {
+      //     url: response.secure_url,
+      //   },
+      // },
       user: {
         connect: { clerkId: user.id },
       },

@@ -1,27 +1,19 @@
 import React from 'react';
 import './PostList.css';
-import CategoryBar from '../CategoryBar/CategoryBar';
-import { prisma } from '@/utils/db';
+// import CategoryBar from '../CategoryBar/CategoryBar';
+import PostCard from '../PostCard/PostCard';
 
-const getPosts = async () => {
-  const getGroomPosts = await prisma.post.findMany({
-    where: { category: { name: 'peluqueria' } },
-  });
-  return getGroomPosts;
-};
-
-const PostList = async () => {
-  // const getGroomPosts = await getPosts();
+const PostList = async ({ posts }: any) => {
   return (
-    <main>
-      <CategoryBar />
-      <button></button>
-      {/* {getGroomPosts.map((post) => (
-        <>
-          <h1>{post.title}</h1>
-        </>
-      ))} */}
-    </main>
+    <section>
+      {/* <CategoryBar /> */}
+      <main>
+        {/* @ts-ignore */}
+        {posts.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
+      </main>
+    </section>
   );
 };
 

@@ -39,7 +39,7 @@ export default function postForm({ setIsOpen }) {
 
       console.log('FORM DATA', formData);
 
-      const response = await fetch('/api/upload', {
+      await fetch('/api/upload', {
         method: 'POST',
         body: formData,
         // headers: { 'Content-Type': 'multipart/form-data' },

@@ -13,6 +13,7 @@
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "@prisma/client": "^5.5.2",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "cloudinary": "^1.41.0",
     "formidable": "^3.5.1",
     "next": "14.0.1",
