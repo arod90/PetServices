@@ -91,6 +91,56 @@ export default function postForm({ setIsOpen }) {
                         />
                       </div>
                     </div>
+                    <label
+                      htmlFor="username"
+                      className="mt-2 block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Numero de contacto (codigo de pais + numero sin 0)
+                    </label>
+                    <div className="mt-2">
+                      <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                        <input
+                          type="tel"
+                          id="phone"
+                          name="phone"
+                          className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                          placeholder="Formato: 593999123456"
+                        />
+                      </div>
+                    </div>
+                    <div className="city-hood-cont flex">
+                      <div className="select">
+                        <label className="mt-2 block text-sm font-medium leading-6 text-gray-900">
+                          Ciudad
+                        </label>
+                        <select className="dropdown mt-2" name="city" id="city">
+                          <option value="Quito">Quito</option>
+                          <option value="Guayaquil">Guayaquil</option>
+                          <option value="Ambato">Ambato</option>
+                          <option value="Loja">Loja</option>
+                          <option value="Cuenca">Cuenca</option>
+                        </select>
+                      </div>
+                      <div className="sector ml-6">
+                        <label
+                          htmlFor="username"
+                          className="mt-2 block text-sm font-medium leading-6 text-gray-900"
+                        >
+                          Sector
+                        </label>
+                        <div className="mt-2">
+                          <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                            <input
+                              type="tel"
+                              id="hood"
+                              name="hood"
+                              className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                              placeholder="Ejemplo: Tumbaco"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="col-span-full">
@@ -107,7 +157,7 @@ export default function postForm({ setIsOpen }) {
                       <textarea
                         name="description"
                         id="description"
-                        rows={4}
+                        rows={3}
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         defaultValue={''}
                       />

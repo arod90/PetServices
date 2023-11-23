@@ -24,6 +24,9 @@ export async function POST(request) {
   const description = data.get('description');
   const category = data.get('category');
   const image = data.get('image');
+  const phone = data.get('phone');
+  const city = data.get('city');
+  const hood = data.get('hood');
 
   if (!image) {
     return NextResponse.json('no image uploaded API');
@@ -60,6 +63,9 @@ export async function POST(request) {
           create: { name: category },
         },
       },
+      city: city,
+      hood: hood,
+      phone: phone,
       imageUrl: response.secure_url,
 
       // for image array!

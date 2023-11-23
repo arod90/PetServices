@@ -5,7 +5,6 @@ import PostCard from '../PostCard/PostCard';
 const PostList = async ({ posts }: any) => {
   return (
     <section>
-      {/* <CategoryBar /> */}
       <main>
         {/* @ts-ignore */}
         {posts.map((post) => (

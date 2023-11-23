@@ -1,8 +1,6 @@
-import CategoryBar from '@/components/CategoryBar/CategoryBar';
-import Navbar from '@/components/Navbar/Navbar';
-import PostList from '@/components/PostList/PostList';
+import Featured from '@/components/FeaturedSection/Featured';
 
-// @ts-ignore
 export default function Home() {
-  return <body></body>;
+  // TODO Implement featured section
+  return <Featured />;
 }

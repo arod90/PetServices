@@ -1,21 +1,36 @@
+'use client';
+
+import { useState } from 'react';
 import './CategoryBar.css';
 
 const navigation = [
-  { name: 'Peluqueria', href: 'peluqueria' },
-  { name: 'Paseadores', href: 'paseadores' },
-  { name: 'Veterinarios', href: 'veterinarios' },
-  { name: 'Productos', href: 'productos' },
+  { name: 'Peluqueria', href: 'peluqueria', tab: 'tab1' },
+  { name: 'Paseadores', href: 'paseadores', tab: 'tab2' },
+  { name: 'Veterinarios', href: 'veterinarios', tab: 'tab3' },
+  { name: 'Productos', href: 'productos', tab: 'tab4' },
 ];
 
-export default async function Example() {
-  // console.log(getGroomPosts);
+export default function Example() {
+  const [selectedIdx, setSelectedIdx] = useState();
+
   return (
-    <div className="bg-white shadow">
-      <div className="subnav">
-        {navigation.map((item) => {
+    <div className="bg-background">
+      <div className="subnav text-textBlack text-lg">
+        {navigation.map((item, index) => {
           return (
-            <a key={item.name} href={item.href} className="subnav-item">
-              {item.name}
+            <a
+              role="tabpanel"
+              id={item.tab}
+              key={item.name}
+              href={item.href}
+              // aria-selected={selected}
+              // @ts-ignore
+              onClick={() => setSelectedIdx(index)}
+              className={`subnav-item ${
+                index === selectedIdx ? 'selected' : ''
+              }}`}
+            >
+              <span>{item.name}</span>
             </a>
           );
         })}

@@ -11,15 +11,16 @@ import {
 import PostForm from '../postForm/PostForm';
 import { useUser } from '@clerk/nextjs';
 import './Navbar.css';
+import logo from '../../public/dog-svgrepo-com.svg';
 
 export default function Example() {
   const [isOpen, setIsOpen] = useState(false);
   const { isSignedIn, user, isLoaded } = useUser();
 
   return (
-    <header className="bg-white">
+    <header className="bg-background text-textBlack">
       <nav
-        className="mx-auto flex max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8"
+        className="mx-auto text-lg sm:text-xl flex items-center justify-between gap-x-6 p-6 lg:px-8"
         aria-label="Global"
       >
         <a href="/">

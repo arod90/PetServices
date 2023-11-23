@@ -35,6 +35,9 @@ model Post {
   userId      String
   user        User           @relation(fields: [userId], references: [id])
   price       Float?
+  city      String?
+  hood      String?
+  phone    String?
   promotion   PromotionType? // Can be null for unpaid posts
   // Add other post-related fields
   imageUrl    String
