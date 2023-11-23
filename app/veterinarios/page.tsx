@@ -1,3 +1,4 @@
+import ListCard from '@/components/ListCard/ListCard';
 import PostCard from '@/components/PostCard/PostCard';
 import { prisma } from '@/utils/db';
 import React from 'react';
@@ -18,7 +19,7 @@ const page = async () => {
       <main>
         {/* @ts-ignore */}
         {vetPosts.map((post) => (
-          <PostCard key={post.id} post={post} />
+          <ListCard key={post.id} post={post} />
         ))}
       </main>
     </section>

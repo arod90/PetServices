@@ -4,10 +4,10 @@ import { useState } from 'react';
 import './CategoryBar.css';
 
 const navigation = [
-  { name: 'Peluqueria', href: 'peluqueria', tab: 'tab1' },
-  { name: 'Paseadores', href: 'paseadores', tab: 'tab2' },
-  { name: 'Veterinarios', href: 'veterinarios', tab: 'tab3' },
-  { name: 'Productos', href: 'productos', tab: 'tab4' },
+  { name: 'Peluqueria', href: '/peluqueria', tab: 'tab1' },
+  { name: 'Paseadores', href: '/paseadores', tab: 'tab2' },
+  { name: 'Veterinarios', href: '/veterinarios', tab: 'tab3' },
+  { name: 'Productos', href: '/productos', tab: 'tab4' },
 ];
 
 export default function Example() {

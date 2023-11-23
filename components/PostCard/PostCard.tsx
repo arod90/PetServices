@@ -9,6 +9,7 @@ import {
 import { RadioGroup } from '@headlessui/react';
 import { ShieldCheckIcon } from '@heroicons/react/24/outline';
 import './PostCard.css';
+import Link from 'next/link';
 
 const product = {
   name: 'Everyday Ruck Snack',
@@ -39,6 +40,7 @@ function classNames(...classes) {
 export default function PostCard({ post }: any) {
   const [selectedSize, setSelectedSize] = useState(product.sizes[0]);
 
+  // TODO Implement upvote on post to sort by most liked (only for logged in users, only upvote)
   return (
     <div className="bg-white border card">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
@@ -47,7 +49,9 @@ export default function PostCard({ post }: any) {
           <p className="font-medium text-gray-500 hover:text-gray-900">
             {post.categoryName}
           </p>
-
+          <Link href={`${post.categoryName.toLowerCase()}/${post.id}`}>
+            Ver publicacion
+          </Link>
           <div className="mt-4 ">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               {post.title}
