@@ -6,7 +6,7 @@ import Link from 'next/link';
 // @ts-ignore
 const ListCard = ({ post }) => {
   return (
-    <div className="list-card bg-blue mb-4 mt-4" key={post.id}>
+    <div className="list-card bg-blue mb-4" key={post.id}>
       <div className="img-cont ">
         <img src={post.imageUrl} alt="" />
       </div>
@@ -14,10 +14,12 @@ const ListCard = ({ post }) => {
         <p className="font-medium hover:text-indigo-900 cursor-pointer underline w-fit">
           {post.categoryName}
         </p>
-        <Link href={`${post.categoryName.toLowerCase()}/${post.id}`}>
-          Ver publicacion
-        </Link>
+        {/* <Link href={`${post.categoryName.toLowerCase()}/${post.id}`}> */}
+        <Link href={`singlepost/${post.id}`}>Ver publicacion</Link>
         <h3 className="text-2xl font-bold">{post.title}</h3>
+        <p className="font-medium hover:text-indigo-900 cursor-pointer w-fit">
+          {post.city}
+        </p>
         <p className="mt-2 text-lg leading-8 text-gray-600 description">
           {post.description}
         </p>

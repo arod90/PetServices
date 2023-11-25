@@ -37,7 +37,7 @@ export default async function Featured() {
         <div className="mx-auto mt-16  sm:mt-20 lg:mt-10">
           <dl className="grid grid-cols-1 gap-x-14 gap-y-12 lg:max-w-none lg:grid-cols-2 lg:gap-y-16 ">
             {allPosts.map((post) => (
-              <FeaturedCard post={post} />
+              <FeaturedCard key={post.id} post={post} />
             ))}
           </dl>
         </div>

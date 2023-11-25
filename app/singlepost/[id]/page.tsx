@@ -1,13 +1,12 @@
 import React from 'react';
 import PostCard from '@/components/PostCard/PostCard';
 import { prisma } from '@/utils/db';
+import GoBack from '@/components/Buttons/GoBack';
 
 // @ts-ignore
 const getPost = async (id) => {
-  // const user = await getUserByClerkID();
   const entry = await prisma.post.findUnique({
     where: {
-      // this syntax if for when you do a compound index, look at schema in prisma
       id: id,
     },
   });
@@ -17,12 +16,14 @@ const getPost = async (id) => {
 
 // @ts-ignore
 const page = async ({ params }) => {
+  console.log(params);
+
   const post = await getPost(params.id);
   return (
-    <div>
+    <section className="single-post-section">
+      <GoBack />
       <PostCard post={post} />
-      {/* <h1>{post.title}</h1> */}
-    </div>
+    </section>
   );
 };
 
