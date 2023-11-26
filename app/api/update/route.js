@@ -11,12 +11,14 @@ cloudinary.config({
   api_secret: process.env.API_SECRET,
 });
 
-export async function POST(request) {
+// export const revalidate = true;
+
+export async function PATCH(request) {
   // const user = await getUserByClerkID();
   const user = await currentUser();
 
   const data = await request.formData();
-  // console.log('DATA API', data);
+  // console.log('PATCH DATA', data);
   const title = data.get('title');
   const description = data.get('description');
   const category = data.get('category');
@@ -24,6 +26,7 @@ export async function POST(request) {
   const phone = data.get('phone');
   const city = data.get('city');
   const hood = data.get('hood');
+  const postid = data.get('postid');
 
   if (!image) {
     return NextResponse.json('no image uploaded API');
@@ -48,7 +51,10 @@ export async function POST(request) {
   });
   console.log(response);
 
-  const newPost = await prisma.post.create({
+  const updatedPost = await prisma.post.update({
+    where: {
+      id: postid,
+    },
     data: {
       // userId: user.id,
       userId: user.clerkId,
@@ -77,10 +83,9 @@ export async function POST(request) {
     },
   });
 
-  // revalidatePath(`/`);
-  // router.push(`/${category}`);
+  revalidatePath(`/singlepost/${postid}`);
 
   return NextResponse.json({
-    data: newPost,
+    data: updatedPost,
   });
 }

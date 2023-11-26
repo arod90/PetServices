@@ -1,4 +1,4 @@
-// 'use client';
+'use client';
 
 import {
   CheckIcon,
@@ -7,6 +7,8 @@ import {
 } from '@heroicons/react/20/solid';
 import { ShieldCheckIcon } from '@heroicons/react/24/outline';
 import './PostCard.css';
+import { useState } from 'react';
+import EditForm from '../EditForm/EditForm';
 
 const product = {
   name: 'Everyday Ruck Snack',
@@ -35,6 +37,8 @@ function classNames(...classes) {
 }
 
 export default function PostCard({ post }: any) {
+  const [isOpen, setIsOpen] = useState(false);
+
   // const [selectedSize, setSelectedSize] = useState(product.sizes[0]);
 
   // TODO Implement upvote on post to sort by most liked (only for logged in users, only upvote)
@@ -114,7 +118,7 @@ export default function PostCard({ post }: any) {
               className="h-full w-full object-cover object-center"
             />
           </div>
-          <button>Editar Publicacion</button>
+          <button onClick={() => setIsOpen(true)}>Editar Publicacion</button>
         </div>
 
         {/* Product form */}
@@ -210,6 +214,7 @@ export default function PostCard({ post }: any) {
           </section>
         </div>
       </div>
+      {isOpen && <EditForm setIsOpen={setIsOpen} post={post} />}
     </div>
   );
 }

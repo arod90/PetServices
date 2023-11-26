@@ -8,6 +8,9 @@ const getWalkingPosts = async () => {
     where: {
       categoryName: 'paseadores',
     },
+    orderBy: {
+      createdAt: 'desc',
+    },
   });
   return groomingPosts;
 };

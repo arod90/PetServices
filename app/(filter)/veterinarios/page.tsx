@@ -8,6 +8,9 @@ const getVetPosts = async () => {
     where: {
       categoryName: 'veterinarios',
     },
+    orderBy: {
+      createdAt: 'desc',
+    },
   });
   return groomingPosts;
 };

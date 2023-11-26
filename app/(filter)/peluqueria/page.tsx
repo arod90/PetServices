@@ -4,11 +4,13 @@ import { prisma } from '@/utils/db';
 import React from 'react';
 
 const page = async () => {
-  // const { city } = useContext(FilterContext);
   const getGroomingPosts = async () => {
     const groomingPosts = await prisma.post.findMany({
       where: {
         categoryName: 'Peluqueria',
+      },
+      orderBy: {
+        createdAt: 'desc',
       },
     });
     return groomingPosts;

@@ -1,9 +1,8 @@
 import React, { useRef, useState } from 'react';
-import './postForm.css';
+import './editForm.css';
 import { PhotoIcon } from '@heroicons/react/24/solid';
-
 // @ts-ignore
-export default function postForm({ setIsOpen }) {
+export default function editForm({ setIsOpen, post }) {
   const [imageUploaded, setImageUploaded] = useState();
   const [imageName, setImageName] = useState('');
   const [imagePreview, setImagePreview] = useState('');
@@ -33,9 +32,15 @@ export default function postForm({ setIsOpen }) {
     try {
       // @ts-ignore
       const formData = new FormData(form.current);
+
       // @ts-ignore
-      await fetch('/api/upload', {
-        method: 'POST',
+      // for (const value of formData.values()) {
+      //   console.log(value);
+      // }
+
+      await fetch('/api/update', {
+        next: { revalidate: 3 },
+        method: 'PATCH',
         body: formData,
         // headers: { 'Content-Type': 'multipart/form-data' },
       });
@@ -43,7 +48,8 @@ export default function postForm({ setIsOpen }) {
       // const data = await response.json();
       // console.log(data);
 
-      // @ts-ignore
+      // Router.push('/');
+
       setIsOpen(false);
     } catch (error) {
       console.error(error);
@@ -59,7 +65,7 @@ export default function postForm({ setIsOpen }) {
             <div className="space-y-8">
               <div className="border-b border-gray-900/10 pb-8">
                 <h2 className="text-base font-semibold leading-7 text-gray-900">
-                  Nueva Publicacion
+                  Edita tu publicacion
                 </h2>
                 {/* <p className="mt-1 text-sm leading-6 text-gray-600">
                   This information will be displayed publicly so be careful what
@@ -80,6 +86,8 @@ export default function postForm({ setIsOpen }) {
                           type="text"
                           id="title"
                           name="title"
+                          // !TODO finish EDIT FORM
+                          defaultValue={post.title}
                           autoComplete="username"
                           className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                           placeholder="Titulo para tu publicacion"
@@ -98,6 +106,7 @@ export default function postForm({ setIsOpen }) {
                           type="tel"
                           id="phone"
                           name="phone"
+                          defaultValue={post.phone}
                           className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                           placeholder="Formato: 593999123456"
                         />
@@ -128,6 +137,7 @@ export default function postForm({ setIsOpen }) {
                             <input
                               type="tel"
                               id="hood"
+                              defaultValue={post.hood}
                               name="hood"
                               className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                               placeholder="Ejemplo: Tumbaco"
@@ -153,8 +163,10 @@ export default function postForm({ setIsOpen }) {
                         name="description"
                         id="description"
                         rows={3}
+                        defaultValue={post.description}
+                        // value={post.description}
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        defaultValue={''}
+                        // defaultValue={''}
                       />
                     </div>
                   </div>
@@ -194,7 +206,7 @@ export default function postForm({ setIsOpen }) {
                           >
                             <p>
                               {!imageUploaded
-                                ? 'Sube tu imagen'
+                                ? 'Nueva Imagen'
                                 : 'Cambia tu Imagen'}
                             </p>
 
@@ -306,7 +318,23 @@ export default function postForm({ setIsOpen }) {
                 </div>
               </div>
             </div>
-
+            <label
+              htmlFor="username"
+              className="mt-2 text-sm font-medium leading-6 text-gray-900"
+            >
+              ID de publicacion
+            </label>
+            <div className="mt-2">
+              <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                <input
+                  type="string"
+                  id="postid"
+                  name="postid"
+                  defaultValue={post.id}
+                  className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
             <div className="mt-4 flex items-center justify-end gap-x-6">
               <button
                 type="button"
@@ -319,7 +347,7 @@ export default function postForm({ setIsOpen }) {
                 type="submit"
                 className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Save
+                Editar
               </button>
             </div>
           </form>

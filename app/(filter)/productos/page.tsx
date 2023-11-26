@@ -9,6 +9,9 @@ const getProductPosts = async () => {
     where: {
       categoryName: 'productos',
     },
+    orderBy: {
+      createdAt: 'desc',
+    },
   });
   return groomingPosts;
 };
