@@ -26,62 +26,96 @@ export async function PATCH(request) {
   const hood = data.get('hood');
   const postid = data.get('postid');
 
-  if (!image) {
-    return NextResponse.json('no image uploaded API');
-  }
+  if (image.size === 0) {
+    let updatedPost = await prisma.post.update({
+      where: {
+        id: postid,
+      },
+      data: {
+        userId: user.clerkId,
+        title: title,
+        description: description,
+        category: {
+          connectOrCreate: {
+            where: { name: category },
 
-  // @ts-ignore
-  const bytes = await image.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-
-  const response = await new Promise((resolve, reject) => {
-    cloudinary.uploader
-      .upload_stream({}, (err, result) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(result);
-      })
-      .end(buffer);
-  });
-  console.log(response);
-
-  let updatedPost = await prisma.post.update({
-    where: {
-      id: postid,
-    },
-    data: {
-      userId: user.clerkId,
-      title: title,
-      description: description,
-      category: {
-        connectOrCreate: {
-          where: { name: category },
-
-          create: { name: category },
+            create: { name: category },
+          },
+        },
+        city: city,
+        hood: hood,
+        phone: phone,
+        imageUrl: undefined,
+        // for image array!
+        // imageUrl: {
+        //   create: {
+        //     url: response.secure_url,
+        //   },
+        // },
+        user: {
+          connect: { clerkId: user.id },
         },
       },
-      city: city,
-      hood: hood,
-      phone: phone,
-      imageUrl: response.secure_url,
+    });
+    revalidatePath(`/singlepost/${postid}`);
 
-      // for image array!
-      // imageUrl: {
-      //   create: {
-      //     url: response.secure_url,
-      //   },
-      // },
-      user: {
-        connect: { clerkId: user.id },
+    return NextResponse.json({
+      data: updatedPost,
+    });
+  } else {
+    // @ts-ignore
+    const bytes = await image.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    const response = await new Promise((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream({}, (err, result) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(result);
+        })
+        .end(buffer);
+    });
+    console.log(response);
+
+    let updatedPost = await prisma.post.update({
+      where: {
+        id: postid,
       },
-    },
-  });
+      data: {
+        userId: user.clerkId,
+        title: title,
+        description: description,
+        category: {
+          connectOrCreate: {
+            where: { name: category },
 
-  request.revalidate(`/singlepost/${postid}`);
-  // revalidatePath(`/singlepost/${postid}`);
+            create: { name: category },
+          },
+        },
+        city: city,
+        hood: hood,
+        phone: phone,
+        imageUrl: response.secure_url,
 
-  return NextResponse.json({
-    data: updatedPost,
-  });
+        // for image array!
+        // imageUrl: {
+        //   create: {
+        //     url: response.secure_url,
+        //   },
+        // },
+        user: {
+          connect: { clerkId: user.id },
+        },
+      },
+    });
+    // request.revalidate(`/singlepost/${postid}`);
+    // !SHITS NOT WORKING
+    revalidatePath(`/singlepost/${postid}`);
+
+    return NextResponse.json({
+      data: updatedPost,
+    });
+  }
 }

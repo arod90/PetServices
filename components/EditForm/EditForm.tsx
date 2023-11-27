@@ -2,12 +2,41 @@ import React, { useRef, useState } from 'react';
 import './editForm.css';
 import { PhotoIcon } from '@heroicons/react/24/solid';
 import { revalidatePath } from 'next/cache';
+import { useForm, SubmitHandler } from 'react-hook-form';
+
+type Inputs = {
+  title: string;
+  description: string;
+  phone: string;
+  city: string;
+  hood: string;
+  category: string;
+  image: string;
+};
 // @ts-ignore
 export default function editForm({ setIsOpen, post }) {
   const [imageUploaded, setImageUploaded] = useState();
   const [imageName, setImageName] = useState('');
   const [imagePreview, setImagePreview] = useState('');
+  const [count, setCount] = useState(0);
   const form = useRef(null);
+
+  const {
+    register,
+    handleSubmit,
+    // watch,
+    formState: { errors },
+  } = useForm<Inputs>({
+    defaultValues: {
+      //   title: post.title,
+      //   description: post.description,
+      //   phone: post.phone,
+      //   city: post.city,
+      //   hood: post.hood,
+      //   category: post.category,
+      image: post.imageUrl,
+    },
+  });
 
   // @ts-ignore
   const handleChange = (event) => {
@@ -22,33 +51,28 @@ export default function editForm({ setIsOpen, post }) {
     setImagePreview(URL.createObjectURL(event.target.files[0]));
   };
 
-  async function submitData(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  const processForm: SubmitHandler<Inputs> = (data) => {
+    // setData(data);
+    submitData();
+  };
 
-    if (!imageUploaded) {
-      console.log('no image uploaded FORM');
-      return;
-    }
+  // async function submitData(event: React.FormEvent<HTMLFormElement>) {
+  async function submitData() {
+    // event.preventDefault();
+
+    // if (!imageUploaded) {
+    //   console.log('no image uploaded FORM');
+    //   return;
+    // }
 
     try {
       // @ts-ignore
       const formData = new FormData(form.current);
 
-      // @ts-ignore
-      // for (const value of formData.values()) {
-      //   console.log(value);
-      // }
-
       await fetch(`/api/update`, {
         method: 'PATCH',
         body: formData,
-        // headers: { 'Content-Type': 'multipart/form-data' },
       });
-
-      // const data = await response.json();
-      // console.log(data);
-
-      // Router.push('/');
 
       // revalidatePath(`/singlepost/${post.id}`);
 
@@ -63,7 +87,7 @@ export default function editForm({ setIsOpen, post }) {
     <>
       <div className="darkBG">
         <div className="form-cont">
-          <form ref={form} onSubmit={submitData}>
+          <form ref={form} onSubmit={handleSubmit(processForm)}>
             <div className="space-y-8">
               <div className="border-b border-gray-900/10 pb-8">
                 <h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -87,14 +111,22 @@ export default function editForm({ setIsOpen, post }) {
                         <input
                           type="text"
                           id="title"
-                          name="title"
+                          // name="title"
                           // !TODO finish EDIT FORM
                           defaultValue={post.title}
                           autoComplete="username"
                           className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                           placeholder="Titulo para tu publicacion"
+                          {...register('title', {
+                            required: 'Incluir un titulo es obligatorio',
+                          })}
                         />
                       </div>
+                      {errors.title?.message && (
+                        <p className="text-sm text-red-400">
+                          {errors.title.message}
+                        </p>
+                      )}
                     </div>
                     <label
                       htmlFor="username"
@@ -107,12 +139,21 @@ export default function editForm({ setIsOpen, post }) {
                         <input
                           type="tel"
                           id="phone"
-                          name="phone"
+                          // name="phone"
                           defaultValue={post.phone}
                           className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                           placeholder="Formato: 593999123456"
+                          {...register('phone', {
+                            required:
+                              'Ingresa tu numero para que te contacten :)',
+                          })}
                         />
                       </div>
+                      {errors.phone?.message && (
+                        <p className="text-sm text-red-400">
+                          {errors.phone.message}
+                        </p>
+                      )}
                     </div>
                     <div className="city-hood-cont flex">
                       <div className="select">
@@ -162,15 +203,29 @@ export default function editForm({ setIsOpen, post }) {
                         Escribe una descripcion para tu publicacion
                       </p>
                       <textarea
-                        name="description"
+                        // name="description"
                         id="description"
                         rows={3}
                         defaultValue={post.description}
                         // value={post.description}
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         // defaultValue={''}
+                        {...register('description', {
+                          required:
+                            'Ingresa una descripcion para tu publicacion',
+                          maxLength: {
+                            value: 1500,
+                            message: 'Maximo 1500 caracteres',
+                          },
+                        })}
+                        onChange={(e) => setCount(e.target.value.length)}
                       />
                     </div>
+                    {errors.description?.message && (
+                      <p className="text-sm text-red-400">
+                        {errors.description.message}, caracteres: {count}
+                      </p>
+                    )}
                   </div>
 
                   <div className="col-span-full">
@@ -183,10 +238,16 @@ export default function editForm({ setIsOpen, post }) {
                     <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-6">
                       <div className="text-center">
                         {!imageUploaded ? (
-                          <PhotoIcon
-                            className="mx-auto h-12 w-12 text-gray-300"
-                            aria-hidden="true"
-                          />
+                          // <PhotoIcon
+                          //   className="mx-auto h-12 w-12 text-gray-300"
+                          //   aria-hidden="true"
+                          // />
+                          <>
+                            <img
+                              className="img-preview mx-auto"
+                              src={post.imageUrl}
+                            ></img>
+                          </>
                         ) : (
                           <>
                             <img
@@ -196,10 +257,8 @@ export default function editForm({ setIsOpen, post }) {
                           </>
                         )}
 
-                        <p className="text-xs leading-5 text-gray-600">
-                          {imageUploaded
-                            ? imageName
-                            : 'PNG, JPG, JPEG hasta 10MB'}
+                        <p className="text-s leading-5 text-gray-600">
+                          {imageUploaded ? imageName : 'imagen actual'}
                         </p>
                         <div className="mt-2 flex text-sm leading-6 text-gray-600 ml-2">
                           <label
@@ -208,20 +267,30 @@ export default function editForm({ setIsOpen, post }) {
                           >
                             <p>
                               {!imageUploaded
-                                ? 'Nueva Imagen'
+                                ? 'Cambiar Imagen ?'
                                 : 'Cambia tu Imagen'}
                             </p>
 
                             <input
                               id="file-upload"
                               type="file"
-                              onChange={handleChange}
-                              name="image"
+                              // name="image"
                               // accept=".jpg, .png, .gif, .jpeg"
                               // @ts-ignore
                               // multiple="multiple"
                               className="sr-only"
+                              {...register('image', {
+                                onChange: (e) => {
+                                  handleChange(e);
+                                },
+                                // required: 'Sube una imagen para tu publicacion',
+                              })}
                             />
+                            {/* {errors.image?.message && (
+                              <p className="text-sm text-red-400">
+                                {errors.image.message}
+                              </p>
+                            )} */}
                           </label>
                           {imageUploaded && (
                             <button
@@ -256,9 +325,13 @@ export default function editForm({ setIsOpen, post }) {
                           <input
                             type="radio"
                             id="Peluqueria"
-                            name="category"
+                            // name="category"
                             value="Peluqueria"
                             className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                            {...register('category', {
+                              required:
+                                'Selecciona una categoria para tu publicacion',
+                            })}
                           />
                           <label
                             htmlFor="push-everything"
@@ -271,9 +344,13 @@ export default function editForm({ setIsOpen, post }) {
                           <input
                             type="radio"
                             id="Paseadores"
-                            name="category"
+                            // name="category"
                             value="Paseadores"
                             className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                            {...register('category', {
+                              required:
+                                'Selecciona una categoria para tu publicacion',
+                            })}
                           />
                           <label
                             htmlFor="push-email"
@@ -288,9 +365,13 @@ export default function editForm({ setIsOpen, post }) {
                           <input
                             type="radio"
                             id="Veterinarios"
-                            name="category"
+                            // name="category"
                             value="Veterinarios"
                             className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                            {...register('category', {
+                              required:
+                                'Selecciona una categoria para tu publicacion',
+                            })}
                           />
                           <label
                             htmlFor="push-nothing"
@@ -303,9 +384,13 @@ export default function editForm({ setIsOpen, post }) {
                           <input
                             type="radio"
                             id="Productos"
-                            name="category"
+                            // name="category"
                             value="Productos"
                             className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                            {...register('category', {
+                              required:
+                                'Selecciona una categoria para tu publicacion',
+                            })}
                           />
                           <label
                             htmlFor="push-nothing"
@@ -316,6 +401,11 @@ export default function editForm({ setIsOpen, post }) {
                         </div>
                       </div>
                     </div>
+                    {errors.category?.message && (
+                      <p className="text-sm text-red-400">
+                        {errors.category.message}
+                      </p>
+                    )}
                   </fieldset>
                 </div>
               </div>
