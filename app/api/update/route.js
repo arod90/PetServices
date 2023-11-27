@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/utils/db';
 import { currentUser } from '@clerk/nextjs';
-import { revalidatePath } from 'next/cache';
-
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { v2 as cloudinary } from 'cloudinary';
+import { redirect } from 'next/navigation';
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -14,11 +14,9 @@ cloudinary.config({
 // export const revalidate = true;
 
 export async function PATCH(request) {
-  // const user = await getUserByClerkID();
   const user = await currentUser();
 
   const data = await request.formData();
-  // console.log('PATCH DATA', data);
   const title = data.get('title');
   const description = data.get('description');
   const category = data.get('category');
@@ -32,12 +30,9 @@ export async function PATCH(request) {
     return NextResponse.json('no image uploaded API');
   }
 
+  // @ts-ignore
   const bytes = await image.arrayBuffer();
   const buffer = Buffer.from(bytes);
-
-  // save in a file
-  // const filePath = path.join(process.cwd(), 'public', image.name);
-  // writeFile(filePath, buffer);
 
   const response = await new Promise((resolve, reject) => {
     cloudinary.uploader
@@ -51,18 +46,18 @@ export async function PATCH(request) {
   });
   console.log(response);
 
-  const updatedPost = await prisma.post.update({
+  let updatedPost = await prisma.post.update({
     where: {
       id: postid,
     },
     data: {
-      // userId: user.id,
       userId: user.clerkId,
       title: title,
       description: description,
       category: {
         connectOrCreate: {
           where: { name: category },
+
           create: { name: category },
         },
       },
@@ -83,7 +78,8 @@ export async function PATCH(request) {
     },
   });
 
-  revalidatePath(`/singlepost/${postid}`);
+  request.revalidate(`/singlepost/${postid}`);
+  // revalidatePath(`/singlepost/${postid}`);
 
   return NextResponse.json({
     data: updatedPost,

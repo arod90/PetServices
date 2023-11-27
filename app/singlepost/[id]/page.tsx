@@ -10,13 +10,13 @@ const getPost = async (id) => {
       id: id,
     },
   });
-  console.log(entry);
+  // console.log(entry);
   return entry;
 };
 
 // @ts-ignore
 const page = async ({ params }) => {
-  console.log(params);
+  // console.log(params);
 
   const post = await getPost(params.id);
   return (

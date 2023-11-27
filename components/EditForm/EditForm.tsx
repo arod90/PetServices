@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import './editForm.css';
 import { PhotoIcon } from '@heroicons/react/24/solid';
+import { revalidatePath } from 'next/cache';
 // @ts-ignore
 export default function editForm({ setIsOpen, post }) {
   const [imageUploaded, setImageUploaded] = useState();
@@ -38,8 +39,7 @@ export default function editForm({ setIsOpen, post }) {
       //   console.log(value);
       // }
 
-      await fetch('/api/update', {
-        next: { revalidate: 3 },
+      await fetch(`/api/update`, {
         method: 'PATCH',
         body: formData,
         // headers: { 'Content-Type': 'multipart/form-data' },
@@ -49,6 +49,8 @@ export default function editForm({ setIsOpen, post }) {
       // console.log(data);
 
       // Router.push('/');
+
+      // revalidatePath(`/singlepost/${post.id}`);
 
       setIsOpen(false);
     } catch (error) {

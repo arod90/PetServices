@@ -12,11 +12,9 @@ cloudinary.config({
 });
 
 export async function POST(request) {
-  // const user = await getUserByClerkID();
   const user = await currentUser();
 
   const data = await request.formData();
-  // console.log('DATA API', data);
   const title = data.get('title');
   const description = data.get('description');
   const category = data.get('category');
@@ -32,10 +30,6 @@ export async function POST(request) {
   const bytes = await image.arrayBuffer();
   const buffer = Buffer.from(bytes);
 
-  // save in a file
-  // const filePath = path.join(process.cwd(), 'public', image.name);
-  // writeFile(filePath, buffer);
-
   const response = await new Promise((resolve, reject) => {
     cloudinary.uploader
       .upload_stream({}, (err, result) => {
@@ -50,7 +44,6 @@ export async function POST(request) {
 
   const newPost = await prisma.post.create({
     data: {
-      // userId: user.id,
       userId: user.clerkId,
       title: title,
       description: description,
@@ -78,7 +71,6 @@ export async function POST(request) {
   });
 
   // revalidatePath(`/`);
-  // router.push(`/${category}`);
 
   return NextResponse.json({
     data: newPost,
