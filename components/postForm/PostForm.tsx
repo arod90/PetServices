@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import './postForm.css';
 import { PhotoIcon } from '@heroicons/react/24/solid';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import FormLoad from '../FormLoad/FormLoad';
 
 type Inputs = {
   title: string;
@@ -19,6 +20,8 @@ export default function postForm({ setIsOpen }) {
   const [imageName, setImageName] = useState('');
   const [imagePreview, setImagePreview] = useState('');
   const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+
   const form = useRef(null);
 
   // const [data, setData] = useState<Inputs>();
@@ -54,6 +57,7 @@ export default function postForm({ setIsOpen }) {
   };
   // async function submitData(event: React.FormEvent<HTMLFormElement>) {
   async function submitData() {
+    setLoading(true);
     // event.preventDefault();
 
     if (!imageUploaded) {
@@ -70,6 +74,7 @@ export default function postForm({ setIsOpen }) {
       });
 
       // @ts-ignore
+      setLoading(false);
       setIsOpen(false);
     } catch (error) {
       console.error(error);
@@ -81,336 +86,345 @@ export default function postForm({ setIsOpen }) {
     <>
       <div className="darkBG">
         <div className="form-cont">
-          <form ref={form} onSubmit={handleSubmit(processForm)}>
-            <div className="space-y-8">
-              <div className="border-b border-gray-900/10 pb-8">
-                <h2 className="text-base font-semibold leading-7 text-gray-900">
-                  Nueva Publicacion
-                </h2>
-                {/* <p className="mt-1 text-sm leading-6 text-gray-600">
+          {!loading ? (
+            <form ref={form} onSubmit={handleSubmit(processForm)}>
+              <div className="space-y-8">
+                <div className="border-b border-gray-900/10 pb-8">
+                  <h2 className="text-base font-semibold leading-7 text-gray-900">
+                    Nueva Publicacion
+                  </h2>
+                  {/* <p className="mt-1 text-sm leading-6 text-gray-600">
                   This information will be displayed publicly so be careful what
                   you share.
                 </p> */}
 
-                <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                  <div className="sm:col-span-4">
-                    <label
-                      htmlFor="username"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Titulo
-                    </label>
-                    <div className="mt-2">
-                      <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                        <input
-                          type="text"
-                          id="title"
-                          // name="title"
-                          autoComplete="username"
-                          className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                          placeholder="Titulo para tu publicacion"
-                          {...register('title', {
-                            required: 'Incluir un titulo es obligatorio',
-                          })}
-                        />
+                  <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div className="sm:col-span-4">
+                      <label
+                        htmlFor="username"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Titulo
+                      </label>
+                      <div className="mt-2">
+                        <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                          <input
+                            type="text"
+                            id="title"
+                            // name="title"
+                            autoComplete="username"
+                            className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                            placeholder="Titulo para tu publicacion"
+                            {...register('title', {
+                              required: 'Incluir un titulo es obligatorio',
+                            })}
+                          />
+                        </div>
+                        {errors.title?.message && (
+                          <p className="text-sm text-red-400">
+                            {errors.title.message}
+                          </p>
+                        )}
                       </div>
-                      {errors.title?.message && (
-                        <p className="text-sm text-red-400">
-                          {errors.title.message}
-                        </p>
-                      )}
+                      <label
+                        htmlFor="username"
+                        className="mt-2 block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Numero de contacto (codigo de pais + numero sin 0)
+                      </label>
+                      <div className="mt-2">
+                        <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                          <input
+                            type="tel"
+                            id="phone"
+                            // name="phone"
+                            className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                            placeholder="Formato: 593999123456"
+                            {...register('phone', {
+                              required:
+                                'Ingresa tu numero para que te contacten :)',
+                            })}
+                          />
+                        </div>
+                        {errors.phone?.message && (
+                          <p className="text-sm text-red-400">
+                            {errors.phone.message}
+                          </p>
+                        )}
+                      </div>
+                      <div className="city-hood-cont flex">
+                        <div className="select">
+                          <label className="mt-2 block text-sm font-medium leading-6 text-gray-900">
+                            Ciudad
+                          </label>
+                          <select
+                            className="dropdown mt-2"
+                            name="city"
+                            id="city"
+                          >
+                            <option value="Quito">Quito</option>
+                            <option value="Guayaquil">Guayaquil</option>
+                            <option value="Ambato">Ambato</option>
+                            <option value="Loja">Loja</option>
+                            <option value="Cuenca">Cuenca</option>
+                            <option value="Pais">Todo el Pais</option>
+                          </select>
+                        </div>
+                        <div className="sector ml-6">
+                          <label
+                            htmlFor="username"
+                            className="mt-2 block text-sm font-medium leading-6 text-gray-900"
+                          >
+                            Sector
+                          </label>
+                          <div className="mt-2">
+                            <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                              <input
+                                type="tel"
+                                id="hood"
+                                name="hood"
+                                className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                placeholder="Ejemplo: Tumbaco"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <label
-                      htmlFor="username"
-                      className="mt-2 block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Numero de contacto (codigo de pais + numero sin 0)
-                    </label>
-                    <div className="mt-2">
-                      <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                        <input
-                          type="tel"
-                          id="phone"
-                          // name="phone"
-                          className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                          placeholder="Formato: 593999123456"
-                          {...register('phone', {
+
+                    <div className="col-span-full">
+                      <label
+                        htmlFor="about"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        About
+                      </label>
+                      <div className="mt-2">
+                        <p className="mt-1 text-sm leading-6 text-gray-600">
+                          Escribe una descripcion para tu publicacion
+                        </p>
+                        <textarea
+                          // name="description"
+                          id="description"
+                          rows={3}
+                          className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                          // defaultValue={''}
+                          {...register('description', {
                             required:
-                              'Ingresa tu numero para que te contacten :)',
+                              'Ingresa una descripcion para tu publicacion',
+                            maxLength: {
+                              value: 1500,
+                              message: 'Maximo 1500 caracteres',
+                            },
                           })}
+                          onChange={(e) => setCount(e.target.value.length)}
                         />
                       </div>
-                      {errors.phone?.message && (
+                      {errors.description?.message && (
                         <p className="text-sm text-red-400">
-                          {errors.phone.message}
+                          {errors.description.message}, caracteres: {count}
                         </p>
                       )}
                     </div>
-                    <div className="city-hood-cont flex">
-                      <div className="select">
-                        <label className="mt-2 block text-sm font-medium leading-6 text-gray-900">
-                          Ciudad
-                        </label>
-                        <select className="dropdown mt-2" name="city" id="city">
-                          <option value="Quito">Quito</option>
-                          <option value="Guayaquil">Guayaquil</option>
-                          <option value="Ambato">Ambato</option>
-                          <option value="Loja">Loja</option>
-                          <option value="Cuenca">Cuenca</option>
-                          <option value="Pais">Todo el Pais</option>
-                        </select>
-                      </div>
-                      <div className="sector ml-6">
-                        <label
-                          htmlFor="username"
-                          className="mt-2 block text-sm font-medium leading-6 text-gray-900"
-                        >
-                          Sector
-                        </label>
-                        <div className="mt-2">
-                          <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                            <input
-                              type="tel"
-                              id="hood"
-                              name="hood"
-                              className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                              placeholder="Ejemplo: Tumbaco"
+
+                    <div className="col-span-full">
+                      <label
+                        htmlFor="cover-photo"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Imagen para tu publicacion
+                      </label>
+                      <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-6">
+                        <div className="text-center">
+                          {!imageUploaded ? (
+                            <PhotoIcon
+                              className="mx-auto h-12 w-12 text-gray-300"
+                              aria-hidden="true"
                             />
+                          ) : (
+                            <>
+                              <img
+                                className="img-preview mx-auto"
+                                src={imagePreview}
+                              ></img>
+                            </>
+                          )}
+
+                          <p className="text-xs leading-5 text-gray-600">
+                            {imageUploaded
+                              ? imageName
+                              : 'PNG, JPG, JPEG hasta 10MB'}
+                          </p>
+                          <div className="mt-2 flex text-sm leading-6 text-gray-600 ml-2">
+                            <label
+                              htmlFor="file-upload"
+                              className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 border border-indigo-600 p-2 mb-1 ml-2"
+                            >
+                              <p>
+                                {!imageUploaded
+                                  ? 'Sube tu imagen'
+                                  : 'Cambia tu Imagen'}
+                              </p>
+
+                              <input
+                                id="file-upload"
+                                type="file"
+                                // name="image"
+                                // accept=".jpg, .png, .gif, .jpeg"
+                                // multiple="multiple"
+                                className="sr-only"
+                                {...register('image', {
+                                  onChange: (e) => {
+                                    handleChange(e);
+                                  },
+                                  required:
+                                    'Sube una imagen para tu publicacion',
+                                })}
+                              />
+                              {errors.image?.message && (
+                                <p className="text-sm text-red-400">
+                                  {errors.image.message}
+                                </p>
+                              )}
+                            </label>
+                            {imageUploaded && (
+                              <button
+                                // @ts-ignore
+                                onClick={() => setImageUploaded(null)}
+                                className="relative cursor-pointer rounded-md bg-white font-semibold text-red-600 border border-red-600 p-2 mb-1 ml-2"
+                              >
+                                Borrar Imagen
+                              </button>
+                            )}
+
+                            {/* <p className="pl-1">o arrastralas aqui</p> */}
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-
-                  <div className="col-span-full">
-                    <label
-                      htmlFor="about"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      About
-                    </label>
-                    <div className="mt-2">
-                      <p className="mt-1 text-sm leading-6 text-gray-600">
-                        Escribe una descripcion para tu publicacion
-                      </p>
-                      <textarea
-                        // name="description"
-                        id="description"
-                        rows={3}
-                        className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        // defaultValue={''}
-                        {...register('description', {
-                          required:
-                            'Ingresa una descripcion para tu publicacion',
-                          maxLength: {
-                            value: 1500,
-                            message: 'Maximo 1500 caracteres',
-                          },
-                        })}
-                        onChange={(e) => setCount(e.target.value.length)}
-                      />
-                    </div>
-                    {errors.description?.message && (
-                      <p className="text-sm text-red-400">
-                        {errors.description.message}, caracteres: {count}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="col-span-full">
-                    <label
-                      htmlFor="cover-photo"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Imagen para tu publicacion
-                    </label>
-                    <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-6">
-                      <div className="text-center">
-                        {!imageUploaded ? (
-                          <PhotoIcon
-                            className="mx-auto h-12 w-12 text-gray-300"
-                            aria-hidden="true"
-                          />
-                        ) : (
-                          <>
-                            <img
-                              className="img-preview mx-auto"
-                              src={imagePreview}
-                            ></img>
-                          </>
-                        )}
-
-                        <p className="text-xs leading-5 text-gray-600">
-                          {imageUploaded
-                            ? imageName
-                            : 'PNG, JPG, JPEG hasta 10MB'}
-                        </p>
-                        <div className="mt-2 flex text-sm leading-6 text-gray-600 ml-2">
-                          <label
-                            htmlFor="file-upload"
-                            className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 border border-indigo-600 p-2 mb-1 ml-2"
-                          >
-                            <p>
-                              {!imageUploaded
-                                ? 'Sube tu imagen'
-                                : 'Cambia tu Imagen'}
-                            </p>
-
-                            <input
-                              id="file-upload"
-                              type="file"
-                              // name="image"
-                              // accept=".jpg, .png, .gif, .jpeg"
-                              // multiple="multiple"
-                              className="sr-only"
-                              {...register('image', {
-                                onChange: (e) => {
-                                  handleChange(e);
-                                },
-                                required: 'Sube una imagen para tu publicacion',
-                              })}
-                            />
-                            {errors.image?.message && (
-                              <p className="text-sm text-red-400">
-                                {errors.image.message}
-                              </p>
-                            )}
-                          </label>
-                          {imageUploaded && (
-                            <button
-                              // @ts-ignore
-                              onClick={() => setImageUploaded(null)}
-                              className="relative cursor-pointer rounded-md bg-white font-semibold text-red-600 border border-red-600 p-2 mb-1 ml-2"
-                            >
-                              Borrar Imagen
-                            </button>
-                          )}
-
-                          {/* <p className="pl-1">o arrastralas aqui</p> */}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
-              </div>
 
-              <div className="border-b border-gray-900/10 pb-6">
-                <div className="mt-4 space-y-10">
-                  <fieldset>
-                    <legend className="text-sm font-semibold leading-6 text-gray-900">
-                      Categoria para tu publicacion
-                    </legend>
-                    {/* <p className="mt-1 text-sm leading-6 text-gray-600">
+                <div className="border-b border-gray-900/10 pb-6">
+                  <div className="mt-4 space-y-10">
+                    <fieldset>
+                      <legend className="text-sm font-semibold leading-6 text-gray-900">
+                        Categoria para tu publicacion
+                      </legend>
+                      {/* <p className="mt-1 text-sm leading-6 text-gray-600">
                       These are delivered via SMS to your mobile phone.
                     </p> */}
-                    <div className="mt-2 radio-cont">
-                      <div className="radioleft">
-                        <div className="flex items-center gap-x-3">
-                          <input
-                            type="radio"
-                            id="Peluqueria"
-                            // name="category"
-                            value="Peluqueria"
-                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                            {...register('category', {
-                              required:
-                                'Selecciona una categoria para tu publicacion',
-                            })}
-                          />
-                          <label
-                            htmlFor="push-everything"
-                            className="block text-sm font-medium leading-6 text-gray-900"
-                          >
-                            Peluqueria
-                          </label>
+                      <div className="mt-2 radio-cont">
+                        <div className="radioleft">
+                          <div className="flex items-center gap-x-3">
+                            <input
+                              type="radio"
+                              id="Peluqueria"
+                              // name="category"
+                              value="Peluqueria"
+                              className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                              {...register('category', {
+                                required:
+                                  'Selecciona una categoria para tu publicacion',
+                              })}
+                            />
+                            <label
+                              htmlFor="push-everything"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
+                              Peluqueria
+                            </label>
+                          </div>
+                          <div className="flex items-center gap-x-3">
+                            <input
+                              type="radio"
+                              id="Paseadores"
+                              // name="category"
+                              value="Paseadores"
+                              className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                              {...register('category', {
+                                required:
+                                  'Selecciona una categoria para tu publicacion',
+                              })}
+                            />
+                            <label
+                              htmlFor="push-email"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
+                              Paseadores
+                            </label>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-x-3">
-                          <input
-                            type="radio"
-                            id="Paseadores"
-                            // name="category"
-                            value="Paseadores"
-                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                            {...register('category', {
-                              required:
-                                'Selecciona una categoria para tu publicacion',
-                            })}
-                          />
-                          <label
-                            htmlFor="push-email"
-                            className="block text-sm font-medium leading-6 text-gray-900"
-                          >
-                            Paseadores
-                          </label>
+                        <div className="radioright">
+                          <div className="flex items-center gap-x-3">
+                            <input
+                              type="radio"
+                              id="Veterinarios"
+                              // name="category"
+                              value="Veterinarios"
+                              className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                              {...register('category', {
+                                required:
+                                  'Selecciona una categoria para tu publicacion',
+                              })}
+                            />
+                            <label
+                              htmlFor="push-nothing"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
+                              Veterinarios
+                            </label>
+                          </div>
+                          <div className="flex items-center gap-x-3">
+                            <input
+                              type="radio"
+                              id="Productos"
+                              // name="category"
+                              value="Productos"
+                              className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                              {...register('category', {
+                                required:
+                                  'Selecciona una categoria para tu publicacion',
+                              })}
+                            />
+                            <label
+                              htmlFor="push-nothing"
+                              className="block text-sm font-medium leading-6 text-gray-900"
+                            >
+                              Productos
+                            </label>
+                          </div>
                         </div>
                       </div>
-                      <div className="radioright">
-                        <div className="flex items-center gap-x-3">
-                          <input
-                            type="radio"
-                            id="Veterinarios"
-                            // name="category"
-                            value="Veterinarios"
-                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                            {...register('category', {
-                              required:
-                                'Selecciona una categoria para tu publicacion',
-                            })}
-                          />
-                          <label
-                            htmlFor="push-nothing"
-                            className="block text-sm font-medium leading-6 text-gray-900"
-                          >
-                            Veterinarios
-                          </label>
-                        </div>
-                        <div className="flex items-center gap-x-3">
-                          <input
-                            type="radio"
-                            id="Productos"
-                            // name="category"
-                            value="Productos"
-                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                            {...register('category', {
-                              required:
-                                'Selecciona una categoria para tu publicacion',
-                            })}
-                          />
-                          <label
-                            htmlFor="push-nothing"
-                            className="block text-sm font-medium leading-6 text-gray-900"
-                          >
-                            Productos
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    {errors.category?.message && (
-                      <p className="text-sm text-red-400">
-                        {errors.category.message}
-                      </p>
-                    )}
-                  </fieldset>
+                      {errors.category?.message && (
+                        <p className="text-sm text-red-400">
+                          {errors.category.message}
+                        </p>
+                      )}
+                    </fieldset>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="mt-4 flex items-center justify-end gap-x-6">
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="text-sm font-semibold leading-6 text-gray-900"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Save
-              </button>
-            </div>
-          </form>
+              <div className="mt-4 flex items-center justify-end gap-x-6">
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  className="text-sm font-semibold leading-6 text-gray-900"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          ) : (
+            <FormLoad />
+          )}
         </div>
       </div>
     </>

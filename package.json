@@ -16,6 +16,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "cloudinary": "^1.41.0",
     "formidable": "^3.5.1",
+    "framer-motion": "^10.16.12",
     "next": "14.0.1",
     "prisma": "^5.5.2",
     "react": "^18",

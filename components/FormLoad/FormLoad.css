@@ -1,0 +1,12 @@
+.spinner-container {
+  height: 90vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dog-load {
+  height: 10%;
+}

@@ -5,6 +5,7 @@ import {
   QuestionMarkCircleIcon,
   StarIcon,
 } from '@heroicons/react/20/solid';
+import { SignedIn } from '@clerk/nextjs';
 import { ShieldCheckIcon } from '@heroicons/react/24/outline';
 import './PostCard.css';
 import { useState } from 'react';
@@ -118,7 +119,10 @@ export default function PostCard({ post }: any) {
               className="h-full w-full object-cover object-center"
             />
           </div>
-          <button onClick={() => setIsOpen(true)}>Editar Publicacion</button>
+          <SignedIn>
+            
+            <button onClick={() => setIsOpen(true)}>Editar Publicacion</button>
+          </SignedIn>
         </div>
 
         {/* Product form */}

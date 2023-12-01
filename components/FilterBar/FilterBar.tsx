@@ -179,17 +179,17 @@ export default function FilterBar({ children }) {
         </Transition.Root>
 
         <main className="mx-auto px-2 py-16 ml-4 sm:px-1 sm:py-4 lg:px-2">
-          <div className="border-b border-gray-200 pb-10">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+          <div className="border-b border-gray-200 pb-2">
+            <h1 className="text-4xl text-center font-bold tracking-tight text-gray-900">
               Lista de publicaciones
             </h1>
-            <p className="mt-4 text-base text-gray-500">
+            {/* <p className="mt-4 text-base text-gray-500">
               Checkout out the latest release of Basic Tees, new and improved
               with four openings!
-            </p>
+            </p> */}
           </div>
 
-          <div className="pt-12 lg:grid lg:grid-cols-5 lg:gap-x-8 xl:grid-cols-6">
+          <div className="pt-8 lg:grid lg:grid-cols-5 lg:gap-x-8 xl:grid-cols-6">
             <aside>
               <h2 className="sr-only">Filters</h2>
 

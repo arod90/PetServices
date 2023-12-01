@@ -19,7 +19,7 @@ export default async function Featured() {
 
   // TODO Implement featured section
   return (
-    <div className="bg-background text-textBlack featured-section px-4 sm:px-10 py-14 sm:py-12">
+    <div className="bg-background text-textBlack featured-section px-4 sm:px-10 py-8 sm:py-4">
       <div className="mx-auto px-2 lg:px-4">
         <div className="mx-auto lg:text-center">
           {/* <h2 className="text-base font-semibold leading-7 text-indigo-600">
@@ -34,7 +34,7 @@ export default async function Featured() {
             In mi viverra elit nunc.
           </p> */}
         </div>
-        <div className="mx-auto mt-16  sm:mt-20 lg:mt-10">
+        <div className="mx-auto mt-10  sm:mt-10 lg:mt-10">
           <dl className="grid grid-cols-1 gap-x-14 gap-y-12 lg:max-w-none lg:grid-cols-2 lg:gap-y-16 ">
             {allPosts.map((post) => (
               <FeaturedCard key={post.id} post={post} />
