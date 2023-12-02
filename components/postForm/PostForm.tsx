@@ -41,17 +41,17 @@ export default function postForm({ setIsOpen }) {
   // @ts-ignore
   const handleChange = (event) => {
     setImageUploaded(event.target.files[0]);
-    // let names = event.target.files;
-    // let imageNameCont = [];
-    // for (let name of names) {
-    //   imageNameCont.push(name.name);
-    // }
+    let names = event.target.files;
+    let imageNameCont = [];
+    for (let name of names) {
+      imageNameCont.push(name.name);
+    }
     // @ts-ignore
     setImageName(event.target.files[0].name);
     setImagePreview(URL.createObjectURL(event.target.files[0]));
   };
 
-  const processForm: SubmitHandler<Inputs> = (data) => {
+  const processForm: SubmitHandler<Inputs> = () => {
     // setData(data);
     submitData();
   };
@@ -80,7 +80,6 @@ export default function postForm({ setIsOpen }) {
       console.error(error);
     }
   }
-  console.log('render');
 
   return (
     <>
@@ -271,7 +270,8 @@ export default function postForm({ setIsOpen }) {
                                 type="file"
                                 // name="image"
                                 // accept=".jpg, .png, .gif, .jpeg"
-                                // multiple="multiple"
+                                // @ts-ignore
+                                multiple="multiple"
                                 className="sr-only"
                                 {...register('image', {
                                   onChange: (e) => {

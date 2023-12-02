@@ -1,22 +1,9 @@
-import { prisma } from '@/utils/db';
+'use client';
 import './Featured.css';
 import FeaturedCard from '../FeaturedCard/FeaturedCard';
 
-const getAllPosts = async () => {
-  // const itemsNumber = await prisma.post.count();
-  const featuredPosts = prisma.post.findMany({
-    take: 4, // Define the number of items you want
-    orderBy: {
-      createdAt: 'desc',
-    },
-    // skip: Math.floor(Math.random() * (itemsNumber - 4)),
-  });
-  return featuredPosts;
-};
-
-export default async function Featured() {
-  const allPosts = await getAllPosts();
-
+// @ts-ignore
+export default function Featured({ featuredPosts, imageUrls }) {
   // TODO Implement featured section
   return (
     <div className="bg-background text-textBlack featured-section px-4 sm:px-10 py-8 sm:py-4">
@@ -36,8 +23,9 @@ export default async function Featured() {
         </div>
         <div className="mx-auto mt-10  sm:mt-10 lg:mt-10">
           <dl className="grid grid-cols-1 gap-x-14 gap-y-12 lg:max-w-none lg:grid-cols-2 lg:gap-y-16 ">
-            {allPosts.map((post) => (
-              <FeaturedCard key={post.id} post={post} />
+            {/* @ts-ignore */}
+            {featuredPosts.map((post) => (
+              <FeaturedCard key={post.id} post={post} imageUrls={imageUrls} />
             ))}
           </dl>
         </div>

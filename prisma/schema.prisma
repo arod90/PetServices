@@ -31,33 +31,33 @@ model Post {
   updatedAt   DateTime       @updatedAt
   title       String
   description String         @db.Text
-  category    Category       @relation(fields: [categoryName], references: [name])
+  category    Category       @relation(fields: [categoryName], references: [name], onDelete: Cascade)
   userId      String
-  user        User           @relation(fields: [userId], references: [id])
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   price       Float?
-  city      String?
-  hood      String?
-  phone    String?
+  city        String?
+  hood        String?
+  phone       String?
   promotion   PromotionType? // Can be null for unpaid posts
   // Add other post-related fields
-  imageUrl    String
+  imageUrl    Image[]
 
   // Define a one-to-many relationship between Post and Payment (for promoted posts)
-  payments   Payment[]
+  payments     Payment[]
   categoryName String
 
   @@index([userId, id])
   @@index([categoryName])
 }
 
-// model Image {
-//   id     String  @id @default(cuid())
-//   url    String
-//   Post   Post?   @relation(fields: [postId], references: [id])
-//   postId String?
+model Image {
+  id     String  @id @default(cuid())
+  url    String
+  Post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String?
 
-//   @@index([postId])
-// }
+  @@index([postId])
+}
 
 model Category {
   id   Int    @id @default(autoincrement())
@@ -69,7 +69,7 @@ model Category {
 model Payment {
   id            Int           @id @default(autoincrement())
   postId        String
-  post          Post          @relation(fields: [postId], references: [id])
+  post          Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
   amount        Float
   paymentMethod PaymentMethod
 

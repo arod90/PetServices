@@ -2,13 +2,18 @@ import React from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
 import './FeaturedCard.css';
 import Link from 'next/link';
+import ImageSlider from '../ImageSlider/ImageSlider';
 
 // @ts-ignore
-const FeaturedCard = ({ post }) => {
+const FeaturedCard = ({ post, imageUrls }) => {
+  // console.log('POST', post);
+  console.log('imageUrls', imageUrls);
+
   return (
     <div className="featured-card bg-blue" key={post.id}>
-      <div className="img-cont ">
-        <img src={post.imageUrl} alt="" />
+      <div className="img-cont">
+        <ImageSlider images={imageUrls} />
+        {/* <img src={post.imageUrl} alt="" /> */}
       </div>
       <div className="content-cont bg-blue">
         <p className="font-medium hover:text-indigo-900 cursor-pointer underline w-fit">
@@ -26,11 +31,7 @@ const FeaturedCard = ({ post }) => {
           <a target="_blank" href={`https://wa.me/${post.phone}`}>
             <FaWhatsapp size={40} color="#25D366" />
           </a>
-          <p
-            className="ml-3
-                    
-                    mt-2 text-lg leading-8 text-gray-600 description"
-          >
+          <p className="ml-3 mt-2 text-lg leading-8 text-gray-600 description">
             {post.phone && `+${post.phone}`}
           </p>
         </div>

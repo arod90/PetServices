@@ -4,6 +4,7 @@ import { currentUser } from '@clerk/nextjs';
 import { revalidatePath } from 'next/cache';
 
 import { v2 as cloudinary } from 'cloudinary';
+import { buffer } from 'stream/consumers';
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -18,29 +19,38 @@ export async function POST(request) {
   const title = data.get('title');
   const description = data.get('description');
   const category = data.get('category');
-  const image = data.get('image');
+  const images = data.getAll('image');
   const phone = data.get('phone');
   const city = data.get('city');
   const hood = data.get('hood');
 
-  if (!image) {
-    return NextResponse.json('no image uploaded API');
+  console.log('IMAGES', images);
+
+  // if (!images) {
+  //   return NextResponse.json('no image uploaded API');
+  // }
+
+  let buffers = [];
+  for (const image of images) {
+    const bytes = await image.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    // Upload buffer to Cloudinary
+    buffers.push(buffer);
   }
 
-  const bytes = await image.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-
-  const response = await new Promise((resolve, reject) => {
-    cloudinary.uploader
-      .upload_stream({}, (err, result) => {
+  const uploads = buffers.map((buffer) => {
+    return new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream({}, (err, result) => {
         if (err) {
           reject(err);
         }
         resolve(result);
-      })
-      .end(buffer);
+      });
+      stream.end(buffer);
+    });
   });
-  console.log(response);
+
+  const responses = await Promise.all(uploads);
 
   const newPost = await prisma.post.create({
     data: {
@@ -56,14 +66,14 @@ export async function POST(request) {
       city: city,
       hood: hood,
       phone: phone,
-      imageUrl: response.secure_url,
+      // imageUrl: response.secure_url,
 
       // for image array!
-      // imageUrl: {
-      //   create: {
-      //     url: response.secure_url,
-      //   },
-      // },
+      imageUrl: {
+        create: responses.map((response) => ({
+          url: response.secure_url,
+        })),
+      },
       user: {
         connect: { clerkId: user.id },
       },
