@@ -10,6 +10,7 @@ import { ShieldCheckIcon } from '@heroicons/react/24/outline';
 import './PostCard.css';
 import { useState } from 'react';
 import EditForm from '../EditForm/EditForm';
+import ImageSlider from '../ImageSlider/ImageSlider';
 
 const product = {
   name: 'Everyday Ruck Snack',
@@ -38,6 +39,8 @@ function classNames(...classes) {
 }
 
 export default function PostCard({ post }: any) {
+  console.log('post', post);
+
   const [isOpen, setIsOpen] = useState(false);
 
   // const [selectedSize, setSelectedSize] = useState(product.sizes[0]);
@@ -49,11 +52,11 @@ export default function PostCard({ post }: any) {
         {/* Product details */}
         <div className="lg:max-w-lg lg:self-end">
           <p className="font-medium text-gray-500 hover:text-gray-900">
-            {post.categoryName}
+            {post.entry.categoryName}
           </p>
           <div className="mt-4 ">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              {post.title}
+              {post.entry.title}
             </h1>
           </div>
           <div className="divide mt-4"></div>
@@ -95,7 +98,9 @@ export default function PostCard({ post }: any) {
             </div>
 
             <div className="mt-4 space-y-6">
-              <p className="text-base text-gray-800 ">{post.description}</p>
+              <p className="text-base text-gray-800 ">
+                {post.entry.description}
+              </p>
             </div>
 
             <div className="mt-6 flex items-center">
@@ -113,14 +118,16 @@ export default function PostCard({ post }: any) {
         {/* Product image */}
         <div className="mt-10 lg:col-start-2 lg:row-span-2 lg:mt-0 lg:self-center image-cont">
           <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg ">
-            <img
+            {/* <img
               src={post.imageUrl}
               alt={product.imageAlt}
               className="h-full w-full object-cover object-center"
-            />
+            /> */}
+            <div className="img-cont">
+              <ImageSlider images={post.imageUrls} />
+            </div>
           </div>
           <SignedIn>
-            
             <button onClick={() => setIsOpen(true)}>Editar Publicacion</button>
           </SignedIn>
         </div>

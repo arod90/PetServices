@@ -1,0 +1,10 @@
+.preview-cont {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba(182, 182, 182, 0.731);
+  border-radius: 10px;
+  height: 100px;
+  max-width: 400px;
+  padding: 5px;
+}

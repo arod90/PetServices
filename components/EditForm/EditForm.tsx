@@ -86,7 +86,6 @@ export default function editForm({ setIsOpen, post }) {
     }
   }
   console.log('render');
-  //!!TODO add loading state for both forms
 
   return (
     <>
@@ -119,7 +118,7 @@ export default function editForm({ setIsOpen, post }) {
                             id="title"
                             // name="title"
                             // !TODO finish EDIT FORM
-                            defaultValue={post.title}
+                            defaultValue={post.entry.title}
                             autoComplete="username"
                             className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                             placeholder="Titulo para tu publicacion"
@@ -146,7 +145,7 @@ export default function editForm({ setIsOpen, post }) {
                             type="tel"
                             id="phone"
                             // name="phone"
-                            defaultValue={post.phone}
+                            defaultValue={post.entry.phone}
                             className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                             placeholder="Formato: 593999123456"
                             {...register('phone', {
@@ -190,7 +189,7 @@ export default function editForm({ setIsOpen, post }) {
                               <input
                                 type="tel"
                                 id="hood"
-                                defaultValue={post.hood}
+                                defaultValue={post.entry.hood}
                                 name="hood"
                                 className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                                 placeholder="Ejemplo: Tumbaco"
@@ -216,7 +215,7 @@ export default function editForm({ setIsOpen, post }) {
                           // name="description"
                           id="description"
                           rows={3}
-                          defaultValue={post.description}
+                          defaultValue={post.entry.description}
                           // value={post.description}
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                           // defaultValue={''}
@@ -255,7 +254,7 @@ export default function editForm({ setIsOpen, post }) {
                             <>
                               <img
                                 className="img-preview mx-auto"
-                                src={post.imageUrl}
+                                src={post.imageUrls[0]}
                               ></img>
                             </>
                           ) : (
@@ -286,8 +285,8 @@ export default function editForm({ setIsOpen, post }) {
                                 type="file"
                                 // name="image"
                                 // accept=".jpg, .png, .gif, .jpeg"
-                                // @ts-ignore
-                                // multiple="multiple"
+                                //@ts-ignore
+                                multiple="multiple"
                                 className="sr-only"
                                 {...register('image', {
                                   onChange: (e) => {
@@ -432,7 +431,7 @@ export default function editForm({ setIsOpen, post }) {
                     type="string"
                     id="postid"
                     name="postid"
-                    defaultValue={post.id}
+                    defaultValue={post.entry.id}
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                   />
                 </div>

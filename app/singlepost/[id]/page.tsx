@@ -9,9 +9,10 @@ const getPost = async (id) => {
     where: {
       id: id,
     },
+    include: { imageUrl: true },
   });
   // console.log(entry);
-  return entry;
+  return { entry, imageUrls: entry.imageUrl.flatMap((image) => image.url) };
 };
 
 // @ts-ignore
