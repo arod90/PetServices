@@ -1,40 +1,41 @@
 import GoBack from '@/components/Buttons/GoBack';
-import FilterBar from '@/components/FilterBar/FilterBar';
 import ListCard from '@/components/ListCard/ListCard';
-import { FilterContext } from '@/utils/FilterContext';
-
+// import PostCard from '@/components/PostCard/PostCard';
 import { prisma } from '@/utils/db';
-import React from 'react';
+// import React from 'react';
+import { use } from 'react';
 
-// @ts-ignore
-const page = async ({ params }) => {
-  console.log(params);
-
-  //@ts-ignore
-  const getFilteredPosts = async () => {
-    const filteredPosts = await prisma.post.findMany({
+export default function Page({ params }) {
+  const getProductPosts = async () => {
+    const productPosts = await prisma.post.findMany({
       where: {
         categoryName: 'Productos',
         city: params.city,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: { imageUrl: true },
     });
-    return filteredPosts;
+
+    return productPosts.map((post) => ({
+      post,
+      imageUrls: post.imageUrl.flatMap((image) => image.url),
+    }));
+    // return productPosts;
   };
+  const productPosts = use(getProductPosts());
+  // console.log('productPosts', productPosts);
 
-  // TODO! Implement go back button, see code below
-
-  const groomingPosts = await getFilteredPosts();
   return (
     <section className="filtered-section">
       <GoBack />
       <main>
         {/* @ts-ignore */}
-        {groomingPosts.map((post) => (
-          <ListCard key={post.id} post={post} />
+        {productPosts.map((post) => (
+          <ListCard key={post.post.id} post={post} />
         ))}
       </main>
     </section>
   );
-};
-
-export default page;
+}

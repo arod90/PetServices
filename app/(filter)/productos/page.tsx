@@ -1,33 +1,38 @@
 import ListCard from '@/components/ListCard/ListCard';
-import PostCard from '@/components/PostCard/PostCard';
-
+// import PostCard from '@/components/PostCard/PostCard';
 import { prisma } from '@/utils/db';
-import React from 'react';
+// import React from 'react';
+import { use } from 'react';
 
-const getProductPosts = async () => {
-  const groomingPosts = prisma.post.findMany({
-    where: {
-      categoryName: 'productos',
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
-  return groomingPosts;
-};
+export default function Page() {
+  const getWalkingPosts = async () => {
+    const walkingPosts = await prisma.post.findMany({
+      where: {
+        categoryName: 'Productos',
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: { imageUrl: true },
+    });
 
-const page = async () => {
-  const productPosts = await getProductPosts();
+    return walkingPosts.map((post) => ({
+      post,
+      imageUrls: post.imageUrl.flatMap((image) => image.url),
+    }));
+    // return groomingPosts;
+  };
+  const walkingPosts = use(getWalkingPosts());
+  // console.log('walkingPosts', walkingPosts);
+
   return (
     <section>
       <main>
         {/* @ts-ignore */}
-        {productPosts.map((post) => (
-          <ListCard key={post.id} post={post} />
+        {walkingPosts.map((post) => (
+          <ListCard key={post.post.id} post={post} />
         ))}
       </main>
     </section>
   );
-};
-
-export default page;
+}

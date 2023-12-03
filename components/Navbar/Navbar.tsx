@@ -11,7 +11,6 @@ import {
 import PostForm from '../postForm/PostForm';
 import { useUser } from '@clerk/nextjs';
 import './Navbar.css';
-import logo from '../../public/dog-svgrepo-com.svg';
 
 export default function Example() {
   const [isOpen, setIsOpen] = useState(false);

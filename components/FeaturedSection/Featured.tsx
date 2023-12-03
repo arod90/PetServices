@@ -3,7 +3,8 @@ import './Featured.css';
 import FeaturedCard from '../FeaturedCard/FeaturedCard';
 
 // @ts-ignore
-export default function Featured({ featuredPosts, imageUrls }) {
+export default function Featured({ featuredPosts }) {
+  // console.log('featuredPosts', featuredPosts);
   // TODO Implement featured section
   return (
     <div className="bg-background text-textBlack featured-section px-4 sm:px-10 py-8 sm:py-4">
@@ -25,7 +26,7 @@ export default function Featured({ featuredPosts, imageUrls }) {
           <dl className="grid grid-cols-1 gap-x-14 gap-y-12 lg:max-w-none lg:grid-cols-2 lg:gap-y-16 ">
             {/* @ts-ignore */}
             {featuredPosts.map((post) => (
-              <FeaturedCard key={post.id} post={post} imageUrls={imageUrls} />
+              <FeaturedCard key={post.post.id} post={post} />
             ))}
           </dl>
         </div>

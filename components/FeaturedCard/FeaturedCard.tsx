@@ -5,34 +5,35 @@ import Link from 'next/link';
 import ImageSlider from '../ImageSlider/ImageSlider';
 
 // @ts-ignore
-const FeaturedCard = ({ post, imageUrls }) => {
+const FeaturedCard = ({ post }) => {
   // console.log('POST', post);
-  console.log('imageUrls', imageUrls);
+
+  // console.log('imageUrls', imageUrls);
 
   return (
-    <div className="featured-card bg-blue" key={post.id}>
+    <div className="featured-card bg-blue" key={post.post.id}>
       <div className="img-cont">
-        <ImageSlider images={imageUrls} />
-        {/* <img src={post.imageUrl} alt="" /> */}
+        <ImageSlider images={post.imageUrls} />
+        {/* <img src={post.post.imageUrl} alt="" /> */}
       </div>
       <div className="content-cont bg-blue">
         <p className="font-medium hover:text-indigo-900 cursor-pointer underline w-fit">
-          {post.categoryName}
+          {post.post.categoryName}
         </p>
-        <h3 className="text-2xl font-bold">{post.title}</h3>
-        <Link href={`singlepost/${post.id}`}>Ver publicacion</Link>
+        <h3 className="text-2xl font-bold">{post.post.title}</h3>
+        <Link href={`singlepost/${post.post.id}`}>Ver publicacion</Link>
         <p className="mt-2 text-lg leading-8 text-gray-600 description">
-          {post.description}
+          {post.post.description}
         </p>
         <p className="font-medium hover:text-indigo-900 cursor-pointer w-fit">
-          {post.city && `${post.city}, ${post.hood}`}
+          {post.post.city && `${post.post.city}, ${post.post.hood}`}
         </p>
         <div className="phone-cont flex mt-2">
-          <a target="_blank" href={`https://wa.me/${post.phone}`}>
+          <a target="_blank" href={`https://wa.me/${post.post.phone}`}>
             <FaWhatsapp size={40} color="#25D366" />
           </a>
           <p className="ml-3 mt-2 text-lg leading-8 text-gray-600 description">
-            {post.phone && `+${post.phone}`}
+            {post.post.phone && `+${post.post.phone}`}
           </p>
         </div>
       </div>

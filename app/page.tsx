@@ -1,5 +1,6 @@
 import Featured from '@/components/FeaturedSection/Featured';
 import { prisma } from '@/utils/db';
+import { use } from 'react';
 
 const getAllPosts = async () => {
   const featuredPosts = await prisma.post.findMany({
@@ -9,18 +10,24 @@ const getAllPosts = async () => {
     },
     include: { imageUrl: true },
   });
-  const imageUrls = featuredPosts.flatMap((post) =>
-    post.imageUrl.map((image) => ({ url: image.url }))
-  );
-  return { featuredPosts, imageUrls };
+  return featuredPosts.map((post) => ({
+    post,
+    imageUrls: post.imageUrl.flatMap((image) => image.url),
+  }));
 };
 
-export default async function Home() {
-  const { featuredPosts, imageUrls } = await getAllPosts();
-  console.log(imageUrls);
-  // @ts-ignore
-  // console.log('imageUrls', imageUrls);
-  // console.log('featuredPosts', featuredPosts);
+export default function Home() {
+  const featuredPosts = use(getAllPosts());
+  // const imageUrls = featuredPosts.map((post) => {
+  //   const imageUrls = post.imageUrl.map((image) => ({ url: image.url }));
+  //   return imageUrls;
+  // });
+  // console.log('featuredPosts!!', featuredPosts);
+  // console.log('imageUrls!!', imageUrls);
 
-  return <Featured featuredPosts={featuredPosts} imageUrls={imageUrls} />;
+  return (
+    <>
+      <Featured featuredPosts={featuredPosts} />
+    </>
+  );
 }
