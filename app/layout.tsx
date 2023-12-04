@@ -2,8 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ClerkProvider } from '@clerk/nextjs';
-import Navbar from '@/components/Navbar/Navbar';
-import CategoryBar from '@/components/CategoryBar/CategoryBar';
+import NavBar from '@/components/NavBar/NavBar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,8 +22,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={inter.className} suppressHydrationWarning={true}>
-          <Navbar />
-          <CategoryBar />
+          <NavBar />
           {children}
         </body>
       </html>

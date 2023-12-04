@@ -17,12 +17,21 @@ section {
   background-color: #fdfef6;
 }
 
+.swiper-pagination-bullet-active {
+  background-color: #d4d4d4 !important;
+}
+
 .filtered-section {
   padding: 50px;
 }
 
 .single-post-section {
   padding: 50px;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  color: rgb(212, 212, 212);
 }
 
 /* @media (prefers-color-scheme: dark) {

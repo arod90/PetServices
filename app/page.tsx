@@ -1,10 +1,10 @@
-import Featured from '@/components/FeaturedSection/Featured';
+import FeaturedList from '@/components/FeaturedList/FeaturedList';
 import { prisma } from '@/utils/db';
 import { use } from 'react';
 
 const getAllPosts = async () => {
   const featuredPosts = await prisma.post.findMany({
-    take: 4,
+    take: 9,
     orderBy: {
       createdAt: 'desc',
     },
@@ -18,16 +18,18 @@ const getAllPosts = async () => {
 
 export default function Home() {
   const featuredPosts = use(getAllPosts());
-  // const imageUrls = featuredPosts.map((post) => {
-  //   const imageUrls = post.imageUrl.map((image) => ({ url: image.url }));
-  //   return imageUrls;
-  // });
-  // console.log('featuredPosts!!', featuredPosts);
-  // console.log('imageUrls!!', imageUrls);
 
   return (
     <>
-      <Featured featuredPosts={featuredPosts} />
+      <div className="mx-auto lg:text-center">
+        <p className="mt-2 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+          Publicaciones Destacadas
+        </p>
+      </div>
+      <FeaturedList featuredPosts={featuredPosts} sectionName="Peluqueria" />
+      <FeaturedList featuredPosts={featuredPosts} sectionName="Paseadores" />
+      <FeaturedList featuredPosts={featuredPosts} sectionName="Veterinarios" />
+      <FeaturedList featuredPosts={featuredPosts} sectionName="Productos" />
     </>
   );
 }
